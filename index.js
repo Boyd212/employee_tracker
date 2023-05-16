@@ -1,16 +1,14 @@
-//require in your dependencies
 const inquirer = require("inquirer");
 require("console.table");
 const express = require('express');
-// Import and require mysql2
 const mysql = require('mysql2');
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3306;
 const app = express();
 
 const connection = mysql.createConnection({ 
     host: "127.0.0.1",
-    port: "3001",
+    port: "3306",
     user: "root",
     password: "grdPWR123!",
     database: "employee_trackerDB"
@@ -22,7 +20,6 @@ process.on('uncaughtException', function (err) {
 
 connection.connect(function (err) {
   if (err) throw err;
-  // run the start function after the connection is made to prompt the user
   firstPrompt();
 });
 
@@ -79,8 +76,6 @@ function firstPrompt(){
   });
 }
 
-// EMPLOYEES
-
 function viewAllEmployees() {
     let query = 
     `SELECT 
@@ -106,7 +101,6 @@ function viewAllEmployees() {
     });
 }
 
-//VIEW EMPLOYEES BY DEPARTMENT
 function viewEmployeesByDepartment(){
     let query =
     `SELECT 
@@ -129,31 +123,30 @@ function viewEmployeesByDepartment(){
     getDept(deptChoices);
   });
 }
-//GET DEPARTMENT
+
 function getDept(deptChoices){
-    inquirer
-        .prompt([
-            {
-                type: 'list',
-                name: 'department',
-                message: 'Departments: ',
-                choices: deptChoices
-            }
-        ]).then((res)=>{ 
-        let query = `SELECT 
-                        employee.id, 
-                        employee.first_name, 
-                        employee.last_name, 
-                        role.title, 
-                        department.name
-                    FROM employee
-                    JOIN role
-                        ON employee.role_id = role.id
-                    JOIN department
-                        ON department.id = role.department_id
-                    WHERE department.id = ?`
+  inquirer
+    .prompt([{
+      type: 'list',
+      name: 'department',
+      message: 'Departments: ',
+      choices: deptChoices
+    }
+    ]).then((res)=>{ 
+      let query = `SELECT 
+                    employee.id, 
+                    employee.first_name, 
+                    employee.last_name, 
+                    role.title, 
+                    department.name
+                  FROM employee
+                  JOIN role
+                    ON employee.role_id = role.id
+                  JOIN department
+                    ON department.id = role.department_id
+                  WHERE department.id = ?`
   
-        connection.query(query, res.department,(err, res)=>{
+      connection.query(query, res.department,(err, res)=>{
         if(err)throw err;
           firstPrompt();
           console.table(res);
@@ -161,22 +154,21 @@ function getDept(deptChoices){
     })
 }
 
-//ADD AN EMPLOYEE
 function addEmployee() {
-    let query = 
-    `SELECT 
-        role.id, 
-        role.title, 
-        role.salary 
-    FROM role`
+  let query = 
+  `SELECT 
+    role.id, 
+    role.title, 
+    role.salary 
+  FROM role`
 
- connection.query(query,(err, res)=>{
-    if(err)throw err;
+connection.query(query,(err, res)=>{
+  if(err)throw err;
     const role = res.map(({ id, title, salary }) => ({
       value: id, 
       title: `${title}`, 
       salary: `${salary}`
-    }));
+  }));
 
     console.table(res);
     employeeRoles(role);
@@ -215,7 +207,6 @@ function employeeRoles(role) {
   });
 }
 
-//REMOVE EMPLOYEE
 function removeEmployee() {
   let query =
   `SELECT
@@ -253,29 +244,28 @@ function getDelete(employee){
     });
 }
 
-//UPDATE EMPLOYEE ROLE
 function updateEmployeeRole(){
-    let query = `SELECT 
-                    employee.id,
-                    employee.first_name, 
-                    employee.last_name, 
-                    role.title, 
-                    department.name, 
-                    role.salary, 
-                    CONCAT(manager.first_name, ' ', manager.last_name) AS manager
-                FROM employee
-                JOIN role
-                    ON employee.role_id = role.id
-                JOIN department
-                    ON department.id = role.department_id
-                JOIN employee manager
-                    ON manager.id = employee.manager_id`
+  let query = `SELECT 
+                employee.id,
+                employee.first_name, 
+                employee.last_name, 
+                role.title, 
+                department.name, 
+                role.salary, 
+              CONCAT(manager.first_name, ' ', manager.last_name) AS manager
+              FROM employee
+              JOIN role
+                ON employee.role_id = role.id
+              JOIN department
+                ON department.id = role.department_id
+              JOIN employee manager
+                ON manager.id = employee.manager_id`
   
-    connection.query(query,(err, res)=>{
-      if(err)throw err;
+  connection.query(query,(err, res)=>{
+    if(err)throw err;
       const employee = res.map(({ id, first_name, last_name }) => ({
         value: id,
-         name: `${first_name} ${last_name}`      
+        name: `${first_name} ${last_name}`      
       }));
       console.table(res);
       updateRole(employee);
@@ -327,9 +317,8 @@ function getUpdatedRole(employee, roleChoices) {
     });
 }
 
-//ADD ROLE
 function addRole(){
-    var query = 
+  var query = 
     `SELECT 
       department.id, 
       department.name, 
@@ -353,28 +342,27 @@ function addRole(){
 }
   
 function addToRole(department){
-    inquirer
-      .prompt([
-        {
-          type: "input",
-          name: "title",
-          message: "Role title: "
-        },
-        {
-          type: "input",
-          name: "salary",
-          message: "Role Salary: "
-        },
-        {
-          type: "list",
-          name: "department",
-          message: "Department: ",
-          choices: department
-        },
+  inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "title",
+        message: "Role title: "
+      },
+      {
+        type: "input",
+        name: "salary",
+        message: "Role Salary: "
+      },
+      {
+        type: "list",
+        name: "department",
+        message: "Department: ",
+        choices: department
+      },
       ]).then((res)=>{
         let query = `INSERT INTO role SET ?`;
-  
-        connection.query(query, {
+      connection.query(query, {
             title: res.title,
             salary: res.salary,
             department_id: res.department
@@ -385,7 +373,6 @@ function addToRole(department){
     });
 }
 
-//ADD DEPARTMENT
 function addDepartment(){
   inquirer
     .prompt([
@@ -398,7 +385,6 @@ function addDepartment(){
     let query = `INSERT INTO department SET ?`;
     connection.query(query, {name: res.name},(err, res)=>{
       if(err) throw err;
-      //console.log(res);
       firstPrompt();
     });
         })};

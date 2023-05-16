@@ -19,12 +19,12 @@ VALUES
 
 INSERT INTO employee (first_name, last_name, role_id)
 VALUES 
-("Oscar", "Wilde", 1), 
-("James", "Joyce", 2), 
-("Clarice", "Lispector", 3),
-("Jane", "Austen", 4), 
-("George", "Orwell", 5), 
-("Bell", "Hooks", 6), 
-("Charles", "Dickens", 7), 
-("Kurt", "Vonnegut", 5), 
-("Maya", "Angelou", 4); 
+("Asgardian", "Thor", 1), 
+("Lord", "Star", 2), 
+("America", "Captain", 3),
+("Widow", "Black", 4), 
+("Spiderman", "Peter", 5), 
+("Devil", "Dare", 6), 
+("Xavier", "Professor", 7), 
+("Man", "Iron", 5), 
+("Hulk", "Incredible", 4); 
