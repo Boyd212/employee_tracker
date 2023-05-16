@@ -1,3 +1,17 @@
+# employee_tracker application
+
+A command-line interface which allows the user to add and remove employees, assign them to departments and managers.
+
+# Motivation
+Ease of assigning and tracking new and existing employees and their respective roles
+
+# GitHub Repository
+https://github.com/Boyd212/employee_tracker
+
+# Walkthrough video link
+
+
+=================================================================
 # 12 SQL: Employee Tracker
 
 ## Your Task
