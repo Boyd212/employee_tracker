@@ -5,10 +5,14 @@ A command-line interface which allows the user to add and remove employees, assi
 # Motivation
 Ease of assigning and tracking new and existing employees and their respective roles
 
+# Installation and Usage
+Clone repo. From command line, install neccessary dependencies with "npm install" command.  Lauch mysql server and "source db/schema.sql" and "source db/seeds.sql" commands to build databases. Return to standard terminal command line and run "node index.js" to start application.  From the menu, a user can view employees and departments, reassign departments and employees and managers, and delete employees, new employees and departments will be given a uniqe ID# that incriments with each new addition
+
 # GitHub Repository
 https://github.com/Boyd212/employee_tracker
 
 # Walkthrough video link
+https://drive.google.com/file/d/1BV2WrNHrnB9fHUxqKAsDNyCu5CP7DFBj/view
 
 
 =================================================================
